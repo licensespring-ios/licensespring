@@ -1,0 +1,11 @@
+framework module LicenseSpring {
+  umbrella header "LicenseSpring.h"
+  export *
+
+  module * { export * }
+}
+
+module LicenseSpring.Swift {
+  header "LicenseSpring-Swift.h"
+  requires objc
+}

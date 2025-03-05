@@ -1,0 +1,754 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
+// swift-module-flags: -target arm64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name LicenseSpring
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import CommonCrypto
+import CryptoKit
+import Foundation
+@_exported import LicenseSpring
+import Swift
+import UIKit
+import _StringProcessing
+@frozen public struct AnyEncodable : Swift.Encodable {
+  public let value: Any
+  public init<T>(_ value: T?)
+}
+@usableFromInline
+internal protocol _AnyEncodable {
+  var value: Any { get }
+  init<T>(_ value: T?)
+}
+extension LicenseSpring.AnyEncodable : LicenseSpring._AnyEncodable {
+}
+extension LicenseSpring._AnyEncodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension LicenseSpring.AnyEncodable : Swift.Equatable {
+  public static func == (lhs: LicenseSpring.AnyEncodable, rhs: LicenseSpring.AnyEncodable) -> Swift.Bool
+}
+extension LicenseSpring.AnyEncodable : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LicenseSpring.AnyEncodable : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByNilLiteral {
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByBooleanLiteral {
+  public typealias BooleanLiteralType = Swift.Bool
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByIntegerLiteral {
+  public typealias IntegerLiteralType = Swift.Int
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByFloatLiteral {
+  public typealias FloatLiteralType = Swift.Double
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByStringLiteral {
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias StringLiteralType = Swift.String
+  public typealias UnicodeScalarLiteralType = Swift.String
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByStringInterpolation {
+  public typealias StringInterpolation = Swift.DefaultStringInterpolation
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByArrayLiteral {
+  public typealias ArrayLiteralElement = Any
+}
+extension LicenseSpring.AnyEncodable : Swift.ExpressibleByDictionaryLiteral {
+  public typealias Key = Swift.AnyHashable
+  public typealias Value = Any
+}
+extension LicenseSpring._AnyEncodable {
+  public init(nilLiteral _: ())
+  public init(booleanLiteral value: Swift.Bool)
+  public init(integerLiteral value: Swift.Int)
+  public init(floatLiteral value: Swift.Double)
+  public init(extendedGraphemeClusterLiteral value: Swift.String)
+  public init(stringLiteral value: Swift.String)
+  public init(arrayLiteral elements: Any...)
+  public init(dictionaryLiteral elements: (Swift.AnyHashable, Any)...)
+}
+extension LicenseSpring.AnyEncodable : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@objc(LSConfiguration) final public class Configuration : ObjectiveC.NSObject {
+  @objc final public let apiKey: Swift.String
+  @objc final public let sharedKey: Swift.String
+  @objc final public let productCode: Swift.String
+  @objc final public var appName: Swift.String
+  @objc final public var appVersion: Swift.String
+  @objc final public var customerAccountCode: Swift.String?
+  @objc final public var airgapKey: Swift.String?
+  @objc final public var licenseFileName: Swift.String
+  @objc final public var licenseDirectoryPath: Foundation.URL
+  @objc final public var serviceURL: Foundation.URL
+  @objc final public var hardwareID: Swift.String
+  @objc final public var collectHostNameAndLocalIP: Swift.Bool
+  @objc final public var networkTimeout: Swift.Double
+  @objc final public var licenseCryptor: any LicenseSpring.LicenseCryptor
+  @objc final public var proxyHost: Swift.String?
+  @objc final public var proxyPort: Swift.UInt16
+  @objc final public var gracePeriod: Swift.Double
+  @objc public init(apiKey: Swift.String, sharedKey: Swift.String, productCode: Swift.String)
+  @objc deinit
+}
+extension LicenseSpring.Configuration {
+  public static let defaultServiceURL: Foundation.URL
+  public static let defaultLicenseFileName: Swift.String
+}
+extension LicenseSpring.Configuration {
+  @objc final public var licenseFile: Foundation.URL {
+    @objc get
+  }
+}
+@objc public protocol LicenseCryptor {
+  @objc func encrypt(_ data: Foundation.Data) -> Foundation.Data?
+  @objc func decrypt(_ data: Foundation.Data) -> Foundation.Data?
+}
+@objc(LSLicenseManager) final public class LicenseManager : ObjectiveC.NSObject {
+  @objc public init(configuration: LicenseSpring.Configuration) throws
+  @objc final public let configuration: LicenseSpring.Configuration
+  @objc final public var licenseFile: Foundation.URL {
+    @objc get
+  }
+  @objc final public var currentLicense: LicenseSpring.License? {
+    @objc get
+  }
+  @objc final public func activateLicense(licenseKey: Swift.String) throws -> LicenseSpring.License
+  @objc final public func activateLicense(user: Swift.String, password: Swift.String) throws -> LicenseSpring.License
+  @objc final public func activateLicenseOffline(_ activationResponseFile: Foundation.URL) throws -> LicenseSpring.License
+  @objc final public func createOfflineActivationFile(licenseKey: Swift.String, preferredLocation: Foundation.URL? = nil) throws -> Foundation.URL
+  @objc final public func createOfflineActivationFile(user: Swift.String, password: Swift.String, preferredLocation: Foundation.URL? = nil) throws -> Foundation.URL
+  @available(macOS 10.15, iOS 13.0, *)
+  @objc final public func generateAirGapActivationCode(initializationCode: Swift.String, licenseKey: Swift.String) throws -> Swift.String
+  @available(macOS 10.15, iOS 13.0, *)
+  @objc final public func verifyAirGapConfirmationCode(confirmationCode: Swift.String, licenseKey: Swift.String, policyID: Swift.Int) throws
+  @objc final public func activateLicense(airgapPolicyFile policyFile: Foundation.URL, licenseKey: Swift.String, policyID: Swift.Int) throws -> LicenseSpring.License
+  @objc final public func requestSSOURL() throws -> Foundation.URL
+  @objc final public func activateLicense(ssoToken: Swift.String) throws -> LicenseSpring.License
+  @objc final public func requestTrialKey(with email: Swift.String?) throws -> Swift.String
+  @objc final public func requestTrialKey(for customer: LicenseSpring.Customer?, licensePolicy: Swift.String? = nil) throws -> Swift.String
+  @objc final public func requestAvailableVersions(licenseKey: Swift.String) throws -> [LicenseSpring.AvailableVersion]
+  @objc final public func requestAvailableVersions(user: Swift.String) throws -> [LicenseSpring.AvailableVersion]
+  @objc final public func requestInstallationFile(licenseKey: Swift.String, version: Swift.String? = nil) throws -> LicenseSpring.InstallationFile
+  @objc final public func requestInstallationFile(user: Swift.String, version: Swift.String? = nil) throws -> LicenseSpring.InstallationFile
+  @objc final public func requestProductDetails() throws -> LicenseSpring.ProductDetails
+  @objc final public func requestLicenseUsers(for customerEmail: Swift.String) throws -> [LicenseSpring.User]
+  @objc final public func changePassword(user: Swift.String, password: Swift.String, newPassword: Swift.String) throws
+  @objc final public func checkConnection() -> Swift.Bool
+  @objc final public func clearLocalStorage() throws
+  @objc public static let sdkVersion: Swift.String
+  @objc public static let apiVersion: Swift.Int
+  @objc deinit
+}
+extension LicenseSpring.LicenseManager {
+  @objc public static func extractSSOToken(from urlString: Swift.String, scheme: Swift.String) throws -> Swift.String
+}
+public func updateSwap<T>(_ a: inout T, _ b: T) -> T
+@propertyWrapper final public class Atomic<Value> {
+  public enum Synchronization {
+    case unfair
+    case rwlock
+    public static func == (a: LicenseSpring.Atomic<Value>.Synchronization, b: LicenseSpring.Atomic<Value>.Synchronization) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public init(wrappedValue: Value, _ synchronization: LicenseSpring.Atomic<Value>.Synchronization = .unfair)
+  final public var wrappedValue: Value {
+    get
+    set
+  }
+  final public func exchange(_ value: Value) -> Value
+  final public func initialize<T>(_ initialize: @autoclosure () -> T) -> T where Value == T?
+  @objc deinit
+}
+@frozen public struct AnyCodable : Swift.Codable {
+  public let value: Any
+  public init<T>(_ value: T?)
+}
+extension LicenseSpring.AnyCodable : LicenseSpring._AnyEncodable, LicenseSpring._AnyDecodable {
+}
+extension LicenseSpring.AnyCodable : Swift.Equatable {
+  public static func == (lhs: LicenseSpring.AnyCodable, rhs: LicenseSpring.AnyCodable) -> Swift.Bool
+}
+extension LicenseSpring.AnyCodable : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LicenseSpring.AnyCodable : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByNilLiteral {
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByBooleanLiteral {
+  public typealias BooleanLiteralType = Swift.Bool
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByIntegerLiteral {
+  public typealias IntegerLiteralType = Swift.Int
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByFloatLiteral {
+  public typealias FloatLiteralType = Swift.Double
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByStringLiteral {
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias StringLiteralType = Swift.String
+  public typealias UnicodeScalarLiteralType = Swift.String
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByStringInterpolation {
+  public typealias StringInterpolation = Swift.DefaultStringInterpolation
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByArrayLiteral {
+  public typealias ArrayLiteralElement = Any
+}
+extension LicenseSpring.AnyCodable : Swift.ExpressibleByDictionaryLiteral {
+  public typealias Key = Swift.AnyHashable
+  public typealias Value = Any
+}
+extension LicenseSpring.AnyCodable : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@objc public enum LSErrorCode : Swift.Int {
+  case unknown
+  case emptyApiKey
+  case emptySharedKey
+  case emptyProductCode
+  case inaccessibleLicensePath
+  case requestFailed
+  case badResponse
+  case hardwareIDMismatch
+  case productCodeMismatch
+  case licenseKeyMismatch
+  case userMismatch
+  case fileCorrupted
+  case invalidServiceURL
+  case invalidAirGapKey
+  case policyIDMismatch
+  case invalidArgument
+  case clockTampered
+  case activeLicenseRequired
+  case authenticationFailure
+  case authorizationInvalidHeaders
+  case authorizationMissingParams
+  case blacklisted
+  case changePasswordNotAllowed
+  case deviceNotFound
+  case emailMissing
+  case floatingNotAvailable
+  case hmacRequired
+  case internalError
+  case invalidApiKey
+  case invalidProductAuthMethod
+  case licenseActivatedMaxTimes
+  case licenseStartDateError
+  case licenseTransferredMaxTimes
+  case licenseExpired
+  case licenseKeyOrLicenseUserRequired
+  case licenseKeyExists
+  case licenseDeviceExists
+  case licenseKeyRequired
+  case licenseNotActive
+  case licenseNotConsumption
+  case licenseNotEnabled
+  case licenseNotEnoughConsumptions
+  case featureNotEnoughConsumptions
+  case licenseNotFound
+  case licenseUserNotFound
+  case licenseUserActivatedMaxTimes
+  case missingHardwareId
+  case missingHeaders
+  case missingParameters
+  case offlineSignatureMismatch
+  case offlineFloatingCloudNotSupported
+  case orderIdExists
+  case ssoCustomerAccountTokenError
+  case ssoCustomerAccountUrlError
+  case signatureMismatch
+  case subscriptionNotFound
+  case trialExpired
+  case licenseBorrowNotAllowed
+  case borrowUntilNotValid
+  case unknownProduct
+  case unknownProductCode
+  case unsupportedProductFeature
+  case versionNotFound
+  case vmNotAllowed
+  case trialNotAllowed
+  case dateHeaderInvalid
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct LSError : Swift.Error {
+  public var code: LicenseSpring.LSErrorCode
+  public var userInfo: [Swift.String : Any]
+}
+extension LicenseSpring.LSError : Foundation.CustomNSError {
+  public static var errorDomain: Swift.String {
+    get
+  }
+  public var errorCode: Swift.Int {
+    get
+  }
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+@objc(LSCustomer) final public class Customer : ObjectiveC.NSObject {
+  @objc final public var email: Swift.String?
+  @objc final public var firstName: Swift.String?
+  @objc final public var lastName: Swift.String?
+  @objc final public var company: Swift.String?
+  @objc final public var phone: Swift.String?
+  @objc final public var address: Swift.String?
+  @objc final public var city: Swift.String?
+  @objc final public var state: Swift.String?
+  @objc final public var country: Swift.String?
+  @objc final public var postcode: Swift.String?
+  @objc final public var reference: Swift.String?
+  @objc final public var metadata: Foundation.Data?
+  @objc public init(email: Swift.String?, firstName: Swift.String? = nil, lastName: Swift.String? = nil, company: Swift.String? = nil, phone: Swift.String? = nil, address: Swift.String? = nil, city: Swift.String? = nil, state: Swift.String? = nil, country: Swift.String? = nil, postcode: Swift.String? = nil, reference: Swift.String? = nil, metadata: Foundation.Data? = nil)
+  @objc deinit
+}
+@objc(LSUser) final public class User : ObjectiveC.NSObject {
+  @objc final public var email: Swift.String
+  @objc final public var id: Swift.Int
+  @objc final public var trueEmail: Swift.String?
+  @objc final public var createdAt: Foundation.Date?
+  @objc final public var updatedAt: Foundation.Date?
+  @objc final public var isActive: Swift.Bool
+  @objc final public var isManager: Swift.Bool
+  @objc final public var lastLogin: Foundation.Date?
+  @objc final public var initialPassword: Swift.String?
+  @objc final public var isInitialPassword: Swift.Bool
+  @objc final public var firstName: Swift.String?
+  @objc final public var lastName: Swift.String?
+  @objc final public var phoneNumber: Swift.String?
+  @objc public init(email: Swift.String)
+  @objc deinit
+}
+@objc(LSProductDetails) final public class ProductDetails : ObjectiveC.NSObject {
+  @objc final public var productName: Swift.String
+  @objc final public var productCode: Swift.String
+  @objc final public var authorizationMethod: LicenseSpring.AuthorizationMethod
+  @objc final public var isTrialAllowed: Swift.Bool
+  @objc final public var trialPeriod: Swift.Int
+  @objc final public var isOveragesAllowed: Swift.Bool
+  @objc final public var maxOverages: Swift.Int
+  @objc final public var metadata: Foundation.Data?
+  @objc public init(productName: Swift.String, productCode: Swift.String, authorizationMethod: LicenseSpring.AuthorizationMethod)
+  @objc deinit
+}
+@objc(LSAuthorizationMethod) public enum AuthorizationMethod : Swift.Int {
+  case unknown
+  case licenseKey
+  case user
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension LicenseSpring.AuthorizationMethod : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc(LSConsumptionPeriod) public enum ConsumptionPeriod : Swift.Int {
+  case unknown
+  case daily
+  case weekly
+  case monthly
+  case annually
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension LicenseSpring.ConsumptionPeriod : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc(LSLicenseFeature) final public class LicenseFeature : ObjectiveC.NSObject {
+  @objc final public var name: Swift.String
+  @objc final public var code: Swift.String
+  @objc final public var featureType: LicenseSpring.LicenseFeatureType
+  @objc final public var expirationDate: Foundation.Date?
+  @objc final public var maxConsumptions: Swift.Int
+  @objc final public var consumptions: Swift.Int
+  @objc final public var allowUnlimitedConsumptions: Swift.Bool
+  @objc final public var isResetConsumptionEnabled: Swift.Bool
+  @objc final public var consumptionPeriod: LicenseSpring.ConsumptionPeriod
+  @objc final public var localConsumptionsDelta: Swift.Int
+  @objc final public var isConsumptionOverageAllowed: Swift.Bool
+  @objc final public var maxConsumptionOverage: Swift.Int
+  @objc final public var metadata: Foundation.Data?
+  @objc public init(name: Swift.String, code: Swift.String, featureType: LicenseSpring.LicenseFeatureType)
+  @objc deinit
+}
+@objc(LSLicenseFeatureType) public enum LicenseFeatureType : Swift.Int, Swift.Equatable {
+  case unknown
+  case activation
+  case consumption
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension LicenseSpring.LicenseFeatureType : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc(LSCustomField) final public class CustomField : ObjectiveC.NSObject {
+  @objc final public var name: Swift.String
+  @objc final public var value: Swift.String
+  @objc public init(name: Swift.String, value: Swift.String)
+  @objc deinit
+}
+@objc(LSDeviceVariable) final public class DeviceVariable : ObjectiveC.NSObject {
+  @objc final public var id: Swift.Int
+  @objc final public var variable: Swift.String
+  @objc final public var value: Swift.String
+  @objc final public var createdAt: Foundation.Date
+  @objc final public var deviceID: Swift.Int
+  @objc public init(id: Swift.Int, variable: Swift.String, value: Swift.String, createdAt: Foundation.Date, deviceID: Swift.Int)
+  @objc deinit
+}
+@objc(LSInstallationFile) final public class InstallationFile : ObjectiveC.NSObject {
+  @objc final public var hashMD5: Swift.String
+  @objc final public var version: Swift.String
+  @objc final public var installationFileLink: Swift.String
+  @objc final public var requiredVersion: Swift.String?
+  @objc final public var releaseDate: Foundation.Date?
+  @objc final public var environment: Swift.String?
+  @objc final public var eulaLink: Swift.String?
+  @objc final public var releaseNotesLink: Swift.String?
+  @objc final public var size: Swift.UInt64
+  @objc final public var channel: Swift.String?
+  @objc public init(hashMD5: Swift.String, version: Swift.String, installationFileLink: Swift.String)
+  @objc deinit
+}
+@objc(LSAvailableVersion) final public class AvailableVersion : ObjectiveC.NSObject {
+  @objc final public var version: Swift.String
+  @objc final public var releaseDate: Foundation.Date
+  @objc public init(version: Swift.String, releaseDate: Foundation.Date)
+  @objc deinit
+}
+extension Foundation.NSLocking {
+  public func withLock<R>(_ body: () throws -> R) rethrows -> R
+}
+extension Darwin.os_unfair_lock_s {
+  public mutating func withLock<R>(_ body: () throws -> R) rethrows -> R
+}
+extension Darwin._opaque_pthread_rwlock_t {
+  public mutating func withReadLock<R>(_ body: () throws -> R) rethrows -> R
+  public mutating func withWriteLock<R>(_ body: () throws -> R) rethrows -> R
+}
+@objc(LSLicenseType) public enum LicenseType : Swift.Int {
+  case unknown
+  case perpetual
+  case subscription
+  case timeLimited
+  case consumption
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension LicenseSpring.LicenseType : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc(LSLicenseStatus) public enum LicenseState : Swift.Int {
+  case active
+  case inactive
+  case expired
+  case disabled
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension LicenseSpring.LicenseState : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @objc(LSLicense) final public class License : ObjectiveC.NSObject {
+  @objc final public let configuration: LicenseSpring.Configuration
+  @objc final public var licenseKey: Swift.String? {
+    @objc get
+  }
+  @objc final public var user: LicenseSpring.User? {
+    @objc get
+  }
+  @objc final public var productCode: Swift.String {
+    @objc get
+  }
+  @objc final public var licenseType: LicenseSpring.LicenseType {
+    @objc get
+  }
+  @objc final public var customer: LicenseSpring.Customer {
+    @objc get
+  }
+  @objc final public var validityPeriod: Foundation.Date? {
+    @objc get
+  }
+  @objc final public var maintenancePeriod: Foundation.Date? {
+    @objc get
+  }
+  @objc final public var startDate: Foundation.Date? {
+    @objc get
+  }
+  @objc final public var lastSyncDate: Foundation.Date {
+    @objc get
+  }
+  @objc final public var isTrial: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isActive: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isOfflineActivated: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isAirGapActivated: Swift.Bool {
+    @objc get
+  }
+  @objc final public var policyID: Swift.Int {
+    @objc get
+  }
+  @objc final public var installationFile: LicenseSpring.InstallationFile? {
+    @objc get
+  }
+  @objc final public var hardwareID: Swift.String {
+    @objc get
+  }
+  @objc final public var state: LicenseSpring.LicenseState {
+    @objc get
+  }
+  @objc final public var isExpired: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isValid: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isUnlicensedCopy: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isMaintenancePeriodExpired: Swift.Bool {
+    @objc get
+  }
+  @objc final public var gracePeriod: Foundation.TimeInterval {
+    @objc get
+  }
+  @objc final public func fullCheck() throws
+  @objc final public func localCheck() throws
+  @objc final public func synchronize() throws
+  @objc final public var timesActivated: Swift.Int {
+    @objc get
+  }
+  @objc final public var maxActivations: Swift.Int {
+    @objc get
+  }
+  @objc final public func deactivate() throws
+  @objc final public func updateOffline(with file: Foundation.URL) throws
+  @objc final public func deactivateOffline(preferredRequestFile: Foundation.URL? = nil) throws -> Foundation.URL
+  @available(macOS 10.15, iOS 13.0, *)
+  final public func generateAirGapDeactivationCode(initializationCode: Swift.String) throws -> Swift.String
+  @available(macOS 10.15, iOS 13.0, *)
+  final public func deactivateAirGap(confirmationCode: Swift.String) throws
+  @objc final public var features: [LicenseSpring.LicenseFeature] {
+    @objc get
+  }
+  @objc final public func updateFeatureConsumption(code: Swift.String, difference: Swift.Int) throws
+  @objc final public func syncFeatureConsumption(code: Swift.String?) throws
+  @objc final public var isFloating: Swift.Bool {
+    @objc get
+  }
+  @objc final public var maxFloatingUsers: Swift.Int {
+    @objc get
+  }
+  @objc final public var floatingInUseCount: Swift.Int {
+    @objc get
+  }
+  @objc final public var floatingTimeout: Foundation.TimeInterval {
+    @objc get
+  }
+  @objc final public var floatingClientID: Swift.String? {
+    @objc get
+  }
+  @objc final public var floatingEndDate: Foundation.Date? {
+    @objc get
+  }
+  @objc final public var transferCount: Swift.Int {
+    @objc get
+  }
+  @objc final public func registerFloatingLicense() throws
+  @objc final public func releaseFloatingLicense() throws
+  @objc final public var isBorrowed: Swift.Bool {
+    @objc get
+  }
+  @objc final public var canBorrow: Swift.Bool {
+    @objc get
+  }
+  @objc final public var maxBorrowTime: Foundation.TimeInterval {
+    @objc get
+  }
+  @objc final public func borrow(for interval: Foundation.TimeInterval) throws
+  @objc final public func borrow(until date: Foundation.Date?) throws
+  @objc final public var customFields: [LicenseSpring.CustomField] {
+    @objc get
+  }
+  @objc final public var metadata: Foundation.Data? {
+    @objc get
+  }
+  @objc final public var productDetails: LicenseSpring.ProductDetails {
+    @objc get
+  }
+  @objc final public var deviceVariables: [LicenseSpring.DeviceVariable] {
+    @objc get
+  }
+  @objc final public func sendDeviceVariables(_ variables: [Swift.String : Swift.String]) throws
+  @objc final public func requestDeviceVariables() throws -> [LicenseSpring.DeviceVariable]
+  @objc final public func requestAvailableVersions() throws -> [LicenseSpring.AvailableVersion]
+  @objc final public func requestInstallationFile(version: Swift.String? = nil) throws -> LicenseSpring.InstallationFile
+  @objc final public func changePassword(password: Swift.String, newPassword: Swift.String) throws
+  @objc final public var allowUnlimitedConsumptions: Swift.Bool {
+    @objc get
+  }
+  @objc final public var isResetConsumptionEnabled: Swift.Bool {
+    @objc get
+  }
+  @objc final public var consumptionPeriod: LicenseSpring.ConsumptionPeriod {
+    @objc get
+  }
+  @objc final public var isConsumptionOverageAllowed: Swift.Bool {
+    @objc get
+  }
+  @objc final public var maxConsumptionOverage: Swift.Int {
+    @objc get
+  }
+  @objc final public func updateConsumptions(difference: Swift.Int) throws
+  @objc final public var consumptions: Swift.Int {
+    @objc get
+  }
+  @objc final public var maxComsumptions: Swift.Int {
+    @objc get
+  }
+  @objc final public var localConsumptionsDelta: Swift.Int {
+    @objc get
+  }
+  @objc final public func syncConsumptions() throws
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class LSLog {
+  public static var log: ((_ level: LicenseSpring.LSLog.Level, _ message: @autoclosure () -> Any) -> Swift.Void)?
+  public enum Level : Swift.String {
+    case info
+    case warning
+    case error
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  @objc deinit
+}
+@objc public class FloatingClient : ObjectiveC.NSObject {
+  @objc final public let configuration: LicenseSpring.Configuration
+  @objc public init(configuration: LicenseSpring.Configuration) throws
+  @objc public var licenseFile: Foundation.URL {
+    @objc get
+  }
+  @objc public var currentLicense: LicenseSpring.License? {
+    @objc get
+  }
+  @objc public func register(userID: Swift.String) throws -> LicenseSpring.License
+  @objc public func unregister(userID: Swift.String) throws
+  @objc public func clearLocalStorage() throws
+  @objc public func checkConnection() -> Swift.Bool
+  @objc deinit
+}
+@frozen public struct AnyDecodable : Swift.Decodable {
+  public let value: Any
+  public init<T>(_ value: T?)
+}
+@usableFromInline
+internal protocol _AnyDecodable {
+  var value: Any { get }
+  init<T>(_ value: T?)
+}
+extension LicenseSpring.AnyDecodable : LicenseSpring._AnyDecodable {
+}
+extension LicenseSpring._AnyDecodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension LicenseSpring.AnyDecodable : Swift.Equatable {
+  public static func == (lhs: LicenseSpring.AnyDecodable, rhs: LicenseSpring.AnyDecodable) -> Swift.Bool
+}
+extension LicenseSpring.AnyDecodable : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension LicenseSpring.AnyDecodable : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension LicenseSpring.AnyDecodable : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension LicenseSpring.Atomic.Synchronization : Swift.Equatable {}
+extension LicenseSpring.Atomic.Synchronization : Swift.Hashable {}
+extension LicenseSpring.LSErrorCode : Swift.Equatable {}
+extension LicenseSpring.LSErrorCode : Swift.Hashable {}
+extension LicenseSpring.LSErrorCode : Swift.RawRepresentable {}
+extension LicenseSpring.AuthorizationMethod : Swift.Equatable {}
+extension LicenseSpring.AuthorizationMethod : Swift.Hashable {}
+extension LicenseSpring.AuthorizationMethod : Swift.RawRepresentable {}
+extension LicenseSpring.ConsumptionPeriod : Swift.Equatable {}
+extension LicenseSpring.ConsumptionPeriod : Swift.Hashable {}
+extension LicenseSpring.ConsumptionPeriod : Swift.RawRepresentable {}
+extension LicenseSpring.LicenseFeatureType : Swift.Hashable {}
+extension LicenseSpring.LicenseFeatureType : Swift.RawRepresentable {}
+extension LicenseSpring.LicenseType : Swift.Equatable {}
+extension LicenseSpring.LicenseType : Swift.Hashable {}
+extension LicenseSpring.LicenseType : Swift.RawRepresentable {}
+extension LicenseSpring.LicenseState : Swift.Equatable {}
+extension LicenseSpring.LicenseState : Swift.Hashable {}
+extension LicenseSpring.LicenseState : Swift.RawRepresentable {}
+extension LicenseSpring.LSLog.Level : Swift.Equatable {}
+extension LicenseSpring.LSLog.Level : Swift.Hashable {}
+extension LicenseSpring.LSLog.Level : Swift.RawRepresentable {}
